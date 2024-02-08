@@ -13,8 +13,8 @@ import main.GamePanel;
 public class TileManager {
 
 	GamePanel gp;
-	Tile[] tile;
-	int mapTileNum[][];
+	public Tile[] tile;
+	public int mapTileNum[][];
 	
 	public TileManager(GamePanel gp) {
 		
@@ -57,6 +57,7 @@ public class TileManager {
 		}
 	}
 	
+	
 	public void loadMap(String fileMap) {
 		
 		try {
@@ -91,6 +92,7 @@ public class TileManager {
 		}
 	}
 	
+	
 	public void draw(Graphics2D g2) {
 		
 		int worldCol = 0, worldRow = 0;
@@ -110,6 +112,7 @@ public class TileManager {
 				worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
 				g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 			}
+			
 			worldCol++;
 			
 			if (worldCol == gp.maxWorldCol) {

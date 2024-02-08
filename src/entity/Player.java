@@ -16,6 +16,7 @@ public class Player extends Entity{
 	KeyHandler keyH;
 	
 	public final int screenX, screenY;
+	int hasKey = 0;
 	   
 	    
 	public Player(GamePanel gp, KeyHandler keyH){
@@ -28,6 +29,8 @@ public class Player extends Entity{
 	    solidArea = new Rectangle();
 	    solidArea.x = 8;
 	    solidArea.y = 16;
+	    solidAreaDefaultX = solidArea.x;
+	    solidAreaDefaultY = solidArea.y;
 	    solidArea.width = 32;
 	    solidArea.height = 32;
 	        
@@ -59,26 +62,48 @@ public class Player extends Entity{
 	    }
 	}
 	    
-	  public void update(){
+	  public void update() {
+		  
 	      if(keyH.upPressed == true || keyH.downPressed == true || 
 	              keyH.leftPressed == true || keyH.rightPressed == true){
 	          if(keyH.upPressed) {
 	        	  direction = "up";
-	        	  worldY -= speed;
+//	        	  worldY -= speed;
 	          }
 	          else if (keyH.downPressed) {
 	              direction = "down";
-	              worldY += speed;
+//	              worldY += speed;
 	           }
 	          else if (keyH.leftPressed) {
 	              direction = "left";
-	              worldX -= speed;
+//	              worldX -= speed;
 	          }
 	          else if (keyH.rightPressed) {
 	              direction = "right";
-	              worldX += speed;
+//	              worldX += speed;
 	          }
-
+	          
+	          // CHECK TILE COLLISION
+	          collisionOn = false;
+	          gp.cChacker.chackTile(this);
+	          
+	          // CHECK OBJECT COLLISION
+	          int objIndex = gp.cChacker.checkObject(this, true);
+	          pickUpObject(objIndex);
+	          
+	          // IF COLLISION IS FALSE, PLAYER CAN MOVE
+	          if (collisionOn == false) {
+	        	  switch (direction) {
+	        	  
+	        	  case "up": worldY -= speed; break;
+	        	  case "down": worldY += speed; break;
+	        	  case "left": worldX -= speed; break;
+	        	  case "right": worldX += speed; break;
+	        	  
+	        	  }
+	          }
+	          
+	          
 	          spriteCounter++;
 	          if(spriteCounter > 10){
 	              if(spriteNum == 1){
@@ -91,6 +116,30 @@ public class Player extends Entity{
 	          } 
 	      }
 	  }
+	  
+	  public void pickUpObject(int i) {
+		  
+		  if (i != 999) {
+			  
+			  String objectName = gp.obj[i].name;
+			  
+			  switch (objectName) {
+			  case "Key":
+				  hasKey++;
+				  gp.obj[i] = null;
+				  System.out.println("Key:" + hasKey);
+				  break;
+			  case "Door":
+				  if (hasKey > 0) {
+					  gp.obj[i] = null;
+					  hasKey--;
+					  System.out.println("Key:" + hasKey);
+				  }
+				  break;
+			  }
+		  }
+	  }
+	  
 	    
 	    public void draw(Graphics2D g2){
 //	        g2.setColor(Color.white);
