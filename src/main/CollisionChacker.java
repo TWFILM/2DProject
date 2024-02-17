@@ -8,6 +8,7 @@ public class CollisionChacker {
 	
 	public CollisionChacker(GamePanel gp) {
 		this.gp = gp;
+		
 	}
 	
 	public void chackTile(Entity entity) {
